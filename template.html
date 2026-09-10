@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Email</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        html {
+            background:
+                linear-gradient(to bottom, transparent 0%, transparent 85%, #f8f4ff 85%, #f8f4ff 100%),
+                linear-gradient(to right, #1a4a4a 0%, #2d4b6b 25%, #4a2d6b 50%, #6b2d6b 75%, #8b2d8b 100%);
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+
+            margin: 0;
+            padding: 0;
+            font-family: 'Cabin', sans-serif;
+            height: auto;
+            width: 100%;
+            background:
+                linear-gradient(to bottom, transparent 0%, transparent 85%, #f8f4ff 85%, #f8f4ff 100%),
+                linear-gradient(to right, #1a4a4a 0%, #2d4b6b 25%, #4a2d6b 50%, #6b2d6b 75%, #8b2d8b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Hide scrollbars */
+        ::-webkit-scrollbar {
+
+            display: none;
+        }
+
+        * {
+
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+        }
+
+        .email-container {
+
+            width: 700px;
+            max-width: 98vw;
+            height: auto;
+            background:
+                linear-gradient(to bottom, transparent 0%, transparent 85%, #f8f4ff 85%, #f8f4ff 100%),
+                linear-gradient(to right, #1a4a4a 0%, #2d4b6b 25%, #4a2d6b 50%, #6b2d6b 75%, #8b2d8b 100%);
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 0 auto;
+            z-index: 10;
+            box-sizing: border-box;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .email-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.02) 1px, transparent 0);
+            background-size: 3px 3px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .email-content {
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            height: 100%;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+        
+        /* 
+        .workshop-title {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 24px;
+            color: #FFFFFF;
+            text-align: right;
+            margin-left: auto;
+            display: flex;
+            margin-top: 30px;
+            align-items: center;
+            height: 100%;
+        } */
+
+        .content {
+            padding: 0px 30px;
+            background: transparent;
+            overflow-x: hidden;
+        }
+
+        .white-content-container {
+            background: #FFFFFF;
+            padding: 10px 20px 0px 20px;
+            border-radius: 12px;
+            margin-bottom: 0px;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow-x: hidden;
+        }
+
+        .greeting {
+            font-family: 'Cabin';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 22px;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .intro-text {
+            font-family: 'Cabin';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            color: #666666;
+            margin-bottom: 30px;
+        }
+
+        .certificate-section {
+            background: #F8F9FF;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .certificate-text {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 36px;
+            color: #5F51FF;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .certificate-description {
+            font-family: 'Cabin';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            color: #333333;
+        }
+
+        .linkedin-section {
+            background: #FFF8F0;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .linkedin-title {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 30px;
+            color: #FF6B35;
+            margin-bottom: 15px;
+        }
+
+        .linkedin-text {
+            font-family: 'Cabin';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .linkedin-link {
+            display: inline-block;
+            background: #FF6B35;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Cabin';
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .linkedin-link:hover {
+            background: #E55A2B;
+            transform: translateY(-2px);
+        }
+
+
+
+        .social-links {
+            display: none;
+        }
+
+        .social-icon {
+            display: none;
+        }
+
+        .social-icon:hover {
+            display: none;
+        }
+
+        .social-icon img {
+            display: none;
+        }
+
+        .footer {
+            display: none;
+        }
+
+        .contact-info {
+            display: none;
+        }
+
+        .copyright {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Email Container -->
+    <div class="email-container">
+        <!-- Email content on top -->
+        <div class="email-content">
+            <div class="header">
+                <img src="cid:logo" alt="DataCrumbs Logo" style="width: 200px; height: 120px; object-fit: contain; padding: 0; display: flex; margin: 0 auto; align-items: center; justify-content: center;">
+            </div>
+
+            <div class="content">
+                <div class="white-content-container">
+                    <div class="greeting">Dear {student_name},</div>
+
+                    <div class="intro-text">
+                        Congratulations on successfully completing the <strong>{workshop_name}</strong>! We are excited
+                        to share your certificate of achievement, which is attached to this email.
+                    </div>
+
+                    <div class="certificate-section">
+                        <div class="certificate-text">Certificate of Achievement</div>
+                        <div class="certificate-description">
+                            Your certificate has been generated and is attached to this email. This certificate
+                            recognizes your successful completion of the workshop and the skills you've developed.
+                        </div>
+                    </div>
+
+                    <div class="linkedin-section">
+                        <div class="linkedin-title">Share Your Achievement</div>
+                        <div class="linkedin-text">
+                            To help you showcase your accomplishment professionally, we've also included a document with
+                            sample LinkedIn posts that you can customize and share with your network.
+                        </div>
+                    </div>
+
+                    <div class="intro-text">
+                        Thank you for your active participation — we truly enjoyed having you with us, and we hope to
+                        see you again in our future workshops!
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

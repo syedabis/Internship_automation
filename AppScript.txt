@@ -1,0 +1,136 @@
+var sheetName = 'Sheet1';  // Your sheet name
+var uploadFolderID = '1tqH_OCbITNvNPg_nOLHT5o8IRWJaa3y5';  // Replace with your Drive folder ID
+var scriptProp = PropertiesService.getScriptProperties();
+
+function intialSetup() {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  scriptProp.setProperty('key', activeSpreadsheet.getId());
+}
+
+function doPost(e) {
+  Logger.log('doPost triggered');
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  Logger.log('doPost triggered1');
+  try {
+    var form
+    Logger.log('doPost triggered2');
+
+    var formData = e.parameter;  // Get form data (URL-encoded)
+    
+
+    Logger.log('doPost triggered3');
+    Logger.log('doPost triggered4')
+    var doc = SpreadsheetApp.openById(scriptProp.getProperty("key"));
+    var sheetId = scriptProp.getProperty("key");
+    if (!sheetId) {
+      throw new Error("Spreadsheet key not set. Please run initialSetup() in the Apps Script editor.");
+    }
+    var doc = SpreadsheetApp.openById(sheetId);
+
+    var sheet = doc.getSheetByName(sheetName);
+    ;
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+    // Deduplication check: check recent rows for duplicate Email + Workshop
+    var incomingEmail = String(formData.Email || formData.email || '').trim().toLowerCase();
+    var incomingWorkshop = String(formData.workshop || formData.Workshop || '').trim().toLowerCase();
+
+    if (incomingEmail && incomingWorkshop) {
+      var emailColIdx = -1;
+      var workshopColIdx = -1;
+      for (var col = 0; col < headers.length; col++) {
+        var h = String(headers[col]).trim().toLowerCase();
+        if (h === 'email') emailColIdx = col;
+        if (h === 'workshop') workshopColIdx = col;
+      }
+
+      var lastRow = sheet.getLastRow();
+      if (lastRow > 1 && emailColIdx !== -1 && workshopColIdx !== -1) {
+        var startCheckRow = Math.max(2, lastRow - 100);
+        var checkRowCount = lastRow - startCheckRow + 1;
+        var recentRowsData = sheet.getRange(startCheckRow, 1, checkRowCount, headers.length).getValues();
+
+        for (var r = 0; r < recentRowsData.length; r++) {
+          var existingEmail = String(recentRowsData[r][emailColIdx] || '').trim().toLowerCase();
+          var existingWorkshop = String(recentRowsData[r][workshopColIdx] || '').trim().toLowerCase();
+
+          if (existingEmail === incomingEmail && existingWorkshop === incomingWorkshop) {
+            Logger.log('Duplicate submission detected in Apps Script, skipping insert');
+            return ContentService.createTextOutput(JSON.stringify({ result: "success", note: "duplicate ignored" }))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+      }
+    }
+
+    var nextRow = sheet.getLastRow() + 1;
+
+    var newRow = headers.map(function(header) {
+      var hLower = String(header).trim().toLowerCase();
+      return hLower === "timestamp" ? (formData[header] || formData[hLower] || new Date()) : (formData[header] || formData[hLower] || '');  
+    });
+    Logger.log(formData); // Log form data to check if the parameters are being sent
+    Logger.log(newRow);   // Log the new row to check the data before it is written to the sheet
+
+    // Handle file upload (base64 encoded .ipynb file)
+    if (formData.media) {
+      const mediaBlob = Utilities.newBlob(
+        Utilities.base64Decode(formData.media),
+        "application/x-ipynb+json",
+        formData.filename || "uploaded_file.ipynb"
+      );
+
+      const folder = DriveApp.getFolderById(uploadFolderID);
+      const file = folder.createFile(mediaBlob);
+      const fileUrl = file.getUrl();
+
+      // Put file URL in "file" column
+      const fileColumnIndex = headers.indexOf("file");
+      if (fileColumnIndex > -1) {
+        newRow[fileColumnIndex] = fileUrl;
+      } else {
+        newRow.push(fileUrl);  // Just in case "file" column doesn't exist
+      }
+    } else {
+      const fileColumnIndex = headers.indexOf("file");
+      if (fileColumnIndex > -1) {
+        newRow[fileColumnIndex] = "";
+      } else {
+        newRow.push("");
+      }
+    }
+
+
+    // Write the new row data to the sheet
+    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);
+
+    // Return success response to backend
+    return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    // Return error response if something goes wrong
+    return ContentService.createTextOutput(JSON.stringify({ result: "error", error: error.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();  // Release the lock after processing
+  }
+}
+
+function testDoPost() {
+  const mockEvent = {
+    parameter: {
+      enrollment: "12345678",
+      name: "John Doe",
+      email: "john@example.com",
+      phone: "9876543210",
+      assignment: "1",
+      filename: "Assignment1.ipynb",
+      media: Utilities.base64Encode("Sample notebook content")  // Fake base64 data
+    }
+  };
+
+  const response = doPost(mockEvent);
+  Logger.log(response.getContent());
+}
+
