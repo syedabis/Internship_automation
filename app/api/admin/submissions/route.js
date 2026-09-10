@@ -5,7 +5,7 @@ import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { getAuthClient, SHEETS_SCOPE } from '@/lib/googleAuth';
 import { getSession } from '@/lib/adminAuth';
 
-const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
+const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID || process.env.INTERNSHIP_SPREADSHEET_ID || '1ppO4jhKzp3FyFTrft9LCakmnDxAw9oYX52tVI_NKdKw';
 const SUBMISSIONS_SHEET_NAME = 'Sheet1';
 
 export async function GET(req) {
@@ -45,6 +45,6 @@ export async function GET(req) {
     return NextResponse.json({ submissions, headers: sheet.headerValues });
   } catch (error) {
     console.error('Failed to load submissions:', error);
-    return NextResponse.json({ error: 'Failed to load submissions.' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to load submissions.' }, { status: 500 });
   }
 }

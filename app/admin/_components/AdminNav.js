@@ -15,6 +15,7 @@ const BASE_PATH = '/certificate';
 
 const LINKS = [
   { href: '/admin', label: 'Dashboard' },
+  { href: '/admin/internships', label: 'Internships' },
   { href: '/admin/templates', label: 'Templates' },
   { href: '/admin/users', label: 'Users', adminOnly: true },
   { href: '/admin/activity', label: 'Activity' },
