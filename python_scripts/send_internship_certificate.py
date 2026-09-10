@@ -39,9 +39,12 @@ CERTIFICATE_COLUMN = 7   # Column G - Certificate Status (e.g. 'sent')
 OUTPUT_FOLDER = "certificates_output"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-TEMPLATE_PATH = "6-Week Internship Program.png"
-FONT_NAME_PATH = "Poppins-Bold.ttf"
-FONT_META_PATH = "Montserrat Bold 700.ttf"
+PUBLIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
+FONTS_DIR = os.path.join(PUBLIC_DIR, "fonts")
+
+TEMPLATE_PATH = os.path.join(PUBLIC_DIR, "6-Week Internship Program.png")
+FONT_NAME_PATH = os.path.join(FONTS_DIR, "Poppins-Bold.ttf")
+FONT_META_PATH = os.path.join(FONTS_DIR, "Montserrat Bold 700.ttf")
 
 # Target coordinates on 2000x1414 template
 NAME_POSITION = (1065, 310)
