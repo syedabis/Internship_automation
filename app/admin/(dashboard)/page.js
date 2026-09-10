@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
+  Award,
   CalendarClock,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Clock,
   GraduationCap,
   Users,
 } from 'lucide-react';
@@ -87,11 +89,26 @@ export default function AdminSubmissionsPage() {
     () => headers.find((h) => STATUS_COLUMN_CANDIDATES.includes(h.toLowerCase())),
     [headers]
   );
+  const programKey = useMemo(
+    () => headers.find((h) => h.toLowerCase().includes('program') || h.toLowerCase().includes('internship') || h.toLowerCase() === 'workshop'),
+    [headers]
+  );
   const workshopKey = useMemo(() => headers.find((h) => h.toLowerCase() === 'workshop'), [headers]);
   const timestampKey = useMemo(() => headers.find((h) => h.toLowerCase() === 'timestamp'), [headers]);
   const linkedinKey = useMemo(() => headers.find((h) => h.toLowerCase().includes('linkedin')), [headers]);
   const universityKey = useMemo(() => headers.find((h) => h.toLowerCase() === 'university'), [headers]);
   const domainKey = useMemo(() => headers.find((h) => h.toLowerCase() === 'domain'), [headers]);
+
+  const programOptions = useMemo(() => {
+    const pKey = programKey || workshopKey;
+    if (!pKey) return [];
+    const values = new Set();
+    for (const row of submissions) {
+      const v = String(row[pKey] || '').trim();
+      if (v) values.add(v);
+    }
+    return [...values].sort((a, b) => a.localeCompare(b));
+  }, [submissions, programKey, workshopKey]);
 
   // University/domain are free-text fields (no master list like workshops has),
   // so the filter's own options come from whatever values already appear in
@@ -148,7 +165,7 @@ export default function AdminSubmissionsPage() {
 
     for (const row of submissions) {
       const s = statusOf(row);
-      if (s === SENT_STATUS) sent++;
+      if (s === SENT_STATUS || s === 'completed') sent++;
 
       const rawTimestamp = timestampKey ? row[timestampKey] : '';
       const parsed = rawTimestamp ? Date.parse(rawTimestamp) : NaN;
@@ -159,7 +176,8 @@ export default function AdminSubmissionsPage() {
       }
     }
 
-    return { total, sent, last30Days, undated };
+    const pending = total - sent;
+    return { total, sent, pending, last30Days, undated };
   }, [submissions, statusKey, timestampKey]);
 
   // Daily counts for the trend chart + card sparklines, bucketed over the last
@@ -371,18 +389,18 @@ export default function AdminSubmissionsPage() {
           isLoading={isLoading}
         />
         <KpiCard
-          icon={GraduationCap}
-          label="Universities"
-          value={universityOptions.length}
-          color={CATEGORICAL.aqua}
-          trend={dailySeries.map((d) => d.universities)}
+          icon={Clock}
+          label="Pending Certificates"
+          value={stats.pending}
+          color={CATEGORICAL.violet}
+          trend={dailySeries.map((d) => d.submitted)}
           isLoading={isLoading}
         />
         <KpiCard
-          icon={CalendarClock}
-          label="Last 30 Days"
-          value={stats.last30Days}
-          color={CATEGORICAL.violet}
+          icon={Award}
+          label="Internship Programs"
+          value={programOptions.length || 1}
+          color={CATEGORICAL.aqua}
           trend={dailySeries.map((d) => d.submitted)}
           isLoading={isLoading}
         />
