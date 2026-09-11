@@ -33,7 +33,7 @@ const ALL_UNIVERSITIES = '__all__';
 const ALL_DOMAINS = '__all__';
 const SENT_STATUS = 'sent';
 const FAILED_STATUS = 'failed';
-const STATUS_COLUMN_CANDIDATES = ['certificate', 'status'];
+const STATUS_COLUMN_CANDIDATES = ['certificate status', 'certificate', 'status'];
 const ACTIONS_COLUMN_WIDTH = 140;
 // Per-column pixel widths (by lowercased header name) — generous enough that
 // typical values (names, university names, workshop titles) show in full.
@@ -86,7 +86,7 @@ export default function AdminSubmissionsPage() {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
   const statusKey = useMemo(
-    () => headers.find((h) => STATUS_COLUMN_CANDIDATES.includes(h.toLowerCase())),
+    () => headers.find((h) => h.toLowerCase().includes('status') || STATUS_COLUMN_CANDIDATES.includes(h.toLowerCase())),
     [headers]
   );
   const programKey = useMemo(
