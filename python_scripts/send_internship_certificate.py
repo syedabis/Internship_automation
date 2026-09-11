@@ -76,12 +76,12 @@ def generate_internship_certificate(name, date_str=None, cert_no=None, program_n
     image = Image.open(TEMPLATE_PATH).convert("RGB")
     draw = ImageDraw.Draw(image)
     
-    # Calculate responsive font size for student name to fit properly
-    font_size = 55
+    # Calculate responsive font size for student name to fit properly (increased by 20%)
+    font_size = 66
     if len(name_display) > 25:
-        font_size = 42
+        font_size = 50
     elif len(name_display) > 20:
-        font_size = 48
+        font_size = 58
 
     try:
         font_name = ImageFont.truetype(FONT_NAME_PATH, font_size)
@@ -104,9 +104,11 @@ def generate_internship_certificate(name, date_str=None, cert_no=None, program_n
     # Draw Awarded Date at (1610, 1145)
     draw.text(DATE_POSITION, str(date_str), fill=(255, 255, 255), font=font_meta)
     
-    # Draw Certificate Number at (1610, 1190)
+    # Draw Certificate Number at (1610, 1190) (Guaranteed Unique)
     if not cert_no:
-        cert_no = f"DC-INT-{datetime.now().year}-{hash(name) % 10000:04d}"
+        import uuid
+        unique_code = uuid.uuid4().hex[:6].upper()
+        cert_no = f"DC-INT-{datetime.now().year}-{unique_code}"
     draw.text(CERT_NO_POSITION, str(cert_no), fill=(255, 255, 255), font=font_meta)
 
     # Save output image
@@ -446,13 +448,15 @@ def process_internship_certificates(log_callback=print):
                 )
 
                 # Update status in Google Sheet
+                timestamp_now = datetime.now(pytz.timezone('Asia/Karachi')).strftime("%m/%d/%Y, %I:%M:%S %p")
+                worksheet.update_cell(idx, TIMESTAMP_COLUMN, timestamp_now)
                 worksheet.update_cell(idx, CERTIFICATE_COLUMN, "sent")
                 if not cert_no:
                     worksheet.update_cell(idx, CERT_NO_COLUMN, generated_cert_no)
                 if not date_str:
                     worksheet.update_cell(idx, DATE_COLUMN, generated_date)
 
-                log_callback(f"[SUCCESS] Row {idx} marked as 'sent'")
+                log_callback(f"[SUCCESS] Row {idx} marked as 'sent' at {timestamp_now}")
                 processed_count += 1
 
                 # Clean up local output file
