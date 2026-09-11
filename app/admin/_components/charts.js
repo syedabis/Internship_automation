@@ -34,8 +34,8 @@ export function Sparkline({ data, color, height = 40 }) {
 // dataviz default — an HTML/SVG chart ships interactive, not as an upgrade).
 export function TrendChart({ data, series }) {
   const [hoverIndex, setHoverIndex] = useState(null);
-  const width = 1000;
-  const height = 260;
+  const width = 1200;
+  const height = 240;
   const padLeft = 40;
   const padBottom = 28;
   const padTop = 16;
@@ -72,14 +72,15 @@ export function TrendChart({ data, series }) {
   const hovered = hoverIndex !== null ? data[hoverIndex] : null;
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <svg
         viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
         width="100%"
         height={height}
         onMouseMove={handleMove}
         onMouseLeave={() => setHoverIndex(null)}
-        className="overflow-visible"
+        className="overflow-visible w-full"
       >
         {gridLines.map((f) => {
           const y = padTop + plotHeight * (1 - f);
