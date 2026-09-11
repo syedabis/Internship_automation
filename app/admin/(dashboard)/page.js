@@ -24,7 +24,7 @@ const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 // 30 days rather than 14 — submissions cluster around live masterclass dates
 // rather than trickling in daily, so a short window can land entirely inside a
 // quiet stretch and make real activity look flatter than it is.
-const TREND_DAYS = 30;
+const TREND_DAYS = 12;
 
 // Base path — must match `basePath` in next.config.mjs; fetch() does not auto-apply it.
 const BASE_PATH = '';
@@ -407,7 +407,7 @@ export default function AdminSubmissionsPage() {
       </div>
 
       {!isLoading && dailySeries.some((d) => d.submitted > 0) && (
-        <div className="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_320px]">
+        <div className="mb-6">
           <div className="rounded-xl border p-4" style={{ background: SURFACE.card, borderColor: SURFACE.border }}>
             <div className="mb-4">
               <h2 className="text-sm font-semibold" style={{ color: INK.primary }}>
@@ -424,18 +424,6 @@ export default function AdminSubmissionsPage() {
               data={dailySeries}
               series={[{ key: 'sent', label: 'Certificates issued', color: STATUS.good, area: true }]}
             />
-          </div>
-          <div className="rounded-xl border p-4" style={{ background: SURFACE.card, borderColor: SURFACE.border }}>
-            <h2 className="mb-4 text-sm font-semibold" style={{ color: INK.primary }}>
-              Top workshops
-            </h2>
-            {topWorkshops.length > 0 ? (
-              <BarList items={topWorkshops} color={CATEGORICAL.blue} />
-            ) : (
-              <p className="text-sm" style={{ color: INK.muted }}>
-                No workshop data yet.
-              </p>
-            )}
           </div>
         </div>
       )}
