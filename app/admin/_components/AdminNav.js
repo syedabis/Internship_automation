@@ -15,8 +15,6 @@ const BASE_PATH = '';
 
 const LINKS = [
   { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/templates', label: 'Templates' },
-  { href: '/admin/users', label: 'Users', adminOnly: true },
 ];
 
 // Ink at partial opacity, without needing a light/dark class pair per usage —
