@@ -4,7 +4,7 @@ import { AdminRoleProvider } from './_components/RoleContext';
 import { ThemeProvider } from './_components/ThemeContext';
 
 // Base path — must match `basePath` in next.config.mjs; CSS url() does not auto-apply it.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 // Kept in sync with the literal in _components/ThemeContext.js (see the note
 // there on why it's duplicated instead of shared across the server/client
 // module boundary).

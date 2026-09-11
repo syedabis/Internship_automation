@@ -27,7 +27,7 @@ const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 const TREND_DAYS = 30;
 
 // Base path — must match `basePath` in next.config.mjs; fetch() does not auto-apply it.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 const ALL_WORKSHOPS = '__all__';
 const ALL_UNIVERSITIES = '__all__';
 const ALL_DOMAINS = '__all__';

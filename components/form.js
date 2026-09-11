@@ -10,7 +10,7 @@ import domainOptions from '@/data/domains.json';
 // Base path — must match `basePath` in next.config.mjs.
 // next/image src, CSS url(), <video> src, and fetch() do NOT auto-apply basePath,
 // so prefix them manually with this.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 
 // Valid LinkedIn *profile* URL, e.g. https://www.linkedin.com/in/your-name
 // Allows an optional subdomain (www, pk, uk…), trailing slash, and ?query params.

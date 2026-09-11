@@ -9,7 +9,7 @@ import { INK, STATUS, SURFACE } from '../../_components/theme';
 import { useAdminRole } from '../../_components/RoleContext';
 
 // Base path — must match `basePath` in next.config.mjs; fetch() does not auto-apply it.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 const STATUS_FILTERS = [
   { value: 'all', label: 'All' },
   { value: 'active', label: 'Active' },

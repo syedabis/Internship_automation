@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { INK, STATUS, SURFACE } from '../../_components/theme';
 
 // Base path — must match `basePath` in next.config.mjs; fetch() does not auto-apply it.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 const ROLE_OPTIONS = [
   { value: 'general', label: 'Viewer (read-only)' },
   { value: 'admin', label: 'Admin (full control)' },

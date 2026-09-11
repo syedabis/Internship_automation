@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { INK, STATUS, SURFACE } from '../_components/theme';
 
-// Base path — must match `basePath` in next.config.mjs; fetch() does not auto-apply it.
-const BASE_PATH = '/certificate';
+// Base path — empty string since basePath is root
+const BASE_PATH = '';
 
 export default function AdminLoginPage() {
   const router = useRouter();

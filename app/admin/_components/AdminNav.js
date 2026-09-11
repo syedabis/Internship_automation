@@ -11,7 +11,7 @@ import { useAdminTheme } from './ThemeContext';
 
 // Base path — must match `basePath` in next.config.mjs. next/link and useRouter()
 // apply it automatically for internal navigation, but a raw fetch() does not.
-const BASE_PATH = '/certificate';
+const BASE_PATH = '';
 
 const LINKS = [
   { href: '/admin', label: 'Dashboard' },
