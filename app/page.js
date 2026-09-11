@@ -1,9 +1,5 @@
-import AssignmentForm from '../components/form';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div >
-      <AssignmentForm />
-    </div>
-  );
+  redirect('/admin');
 }
