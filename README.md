@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎓 DataCrumbs — Internship Certificate Automation System
 
-## Getting Started
+Automated certificate generation and transactional email dispatch system built for **DataCrumbs** internship programs. 
 
-First, run the development server:
+This system connects directly to Google Sheets, dynamically overlays student names and metadata onto high-resolution certificate templates, sends personalized emails via **Resend** (using custom domains like `aun@datacrumbs.org`), and records unique certificate IDs and timestamps back to the sheet.
 
+---
+
+## ✨ Features
+
+- 📊 **Google Sheets Integration**: Automatically fetches candidate records from Google Sheets and updates rows with status (`sent`), timestamp, and certificate ID.
+- 🎨 **Dynamic High-Res Certificate Generation**: Overlays student name, awarded date, and certificate ID onto canvas templates with responsive font sizing (+20% enhanced name typography).
+- 📧 **Resend Email Engine**: Dispatches responsive HTML emails with attached high-resolution PNG certificates from verified domain email addresses.
+- 🔐 **Guaranteed Unique Certificate IDs**: Generates cryptographically unique certificate numbers (e.g. `DC-INT-2026-FEB1CC`).
+- 🧹 **Smart Email Sanitization**: Auto-corrects domain/formatting typos (e.g., `.con` -> `.com`, embedded spaces) to ensure 100% email deliverability.
+- ⚡ **REST API & CLI Scripts**: Includes Next.js API route (`POST /api/internship/process`), standalone Node.js runner, and Python CLI utilities.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (React & API routes)
+- **Canvas Rendering**: [`@napi-rs/canvas`](https://github.com/Brooooooklyn/canvas) / PIL (Python)
+- **Email Service**: [Resend](https://resend.com/) Node.js SDK
+- **Google Sheets API**: `google-spreadsheet` & `google-auth-library` (Service Account JWT)
+- **Styling & Design**: Vanilla CSS with modern HTML email templates
+
+---
+
+## 📋 Google Sheet Column Schema
+
+The automated reader expects the following column header structure in the primary worksheet:
+
+| Column | Header | Description |
+| :---: | :--- | :--- |
+| **A** | `Timestamp` | Populated automatically with delivery timestamp upon sending. |
+| **B** | `Full Name` | Student's full name printed on the certificate. |
+| **C** | `Email Address` | Candidate's email address. |
+| **D** | `Internship Program` | Internship program name (Default: *6-Week Internship Program*). |
+| **E** | `Awarded Date` | Date shown on certificate (Auto-generated if empty). |
+| **F** | `Certificate No` | Unique certificate ID (Auto-generated if empty). |
+| **G** | `Certificate Status` | Marked as `sent` after successful delivery. |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js v18+ 
+- A verified domain and API Key on [Resend](https://resend.com/)
+- A Google Service Account with Google Sheets API access (`credentials.json`)
+
+### 2. Installation
+
+Clone the repository and install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/syedabis/Internship_automation.git
+cd Internship_automation
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Setup
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Create a `.env` file in the root directory:
+```env
+# Resend API Key & Verified Sender Email
+RESEND_API_KEY=re_your_resend_api_key_here
+EMAIL_USER="DataCrumbs <aun@datacrumbs.org>"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Google Sheets Configuration
+INTERNSHIP_SPREADSHEET_ID=your_google_sheet_id_here
+```
 
-## Learn More
+Place your Google Service Account credentials JSON file as `credentials.json` in the root folder.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏃 Running the Automation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Option 1: Execute via Node CLI (Recommended)
+Process all pending entries in the Google Sheet:
+```bash
+node --env-file=.env -e "require('./lib/internshipCertificate').processPendingInternshipCertificates(console.log)"
+```
 
-## Deploy on Vercel
+### Option 2: Run Next.js Server & Call API Endpoint
+Start the development server:
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Trigger batch certificate generation via HTTP POST:
+```bash
+curl -X POST http://localhost:3000/api/internship/process
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛡️ License & Copyright
+
+© DataCrumbs. All rights reserved. Proprietary software for DataCrumbs internship automation.
