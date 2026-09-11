@@ -34,12 +34,12 @@ export function Sparkline({ data, color, height = 40 }) {
 // dataviz default — an HTML/SVG chart ships interactive, not as an upgrade).
 export function TrendChart({ data, series }) {
   const [hoverIndex, setHoverIndex] = useState(null);
-  const width = 640;
-  const height = 220;
-  const padLeft = 36;
-  const padBottom = 22;
-  const padTop = 12;
-  const plotWidth = width - padLeft - 8;
+  const width = 1000;
+  const height = 260;
+  const padLeft = 40;
+  const padBottom = 28;
+  const padTop = 16;
+  const plotWidth = width - padLeft - 16;
   const plotHeight = height - padBottom - padTop;
 
   const maxValue = useMemo(() => {
@@ -75,7 +75,6 @@ export function TrendChart({ data, series }) {
     <div className="relative">
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        preserveAspectRatio="none"
         width="100%"
         height={height}
         onMouseMove={handleMove}
@@ -87,7 +86,7 @@ export function TrendChart({ data, series }) {
           return (
             <g key={f}>
               <line x1={padLeft} x2={width} y1={y} y2={y} stroke={SURFACE.grid} strokeWidth="1" />
-              <text x={padLeft - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize="10" fill={INK.muted}>
+              <text x={padLeft - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize="11" fill={INK.muted}>
                 {Math.round(maxValue * f)}
               </text>
             </g>
@@ -105,18 +104,17 @@ export function TrendChart({ data, series }) {
           ) : null
         )}
         {seriesPaths.map((s) => (
-          <path key={s.key} d={s.line} fill="none" stroke={s.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path key={s.key} d={s.line} fill="none" stroke={s.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         ))}
 
         {data.map((d, i) => (
           <text
             key={d.label}
             x={xFor(i)}
-            y={height - 4}
+            y={height - 6}
             textAnchor="middle"
-            fontSize="10"
+            fontSize="11"
             fill={INK.muted}
-            className={i % Math.ceil(data.length / 7) === 0 ? '' : 'hidden'}
           >
             {d.label}
           </text>
